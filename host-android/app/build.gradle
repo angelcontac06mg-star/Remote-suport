@@ -1,0 +1,29 @@
+plugins { id 'com.android.application'; id 'org.jetbrains.kotlin.android' }
+def targetAbi = project.findProperty('targetAbi')
+def buildConfigValue = { key, fallback = '' ->
+  def value = project.findProperty(key) ?: System.getenv(key) ?: fallback
+  '"' + value.toString().replace('\\', '\\\\').replace('"', '\\"') + '"'
+}
+android {
+  namespace 'com.tuempresa.remoteassist.host'
+  compileSdk 34
+  defaultConfig {
+    applicationId 'com.tuempresa.remoteassist.host'
+    minSdk 26
+    targetSdk 34
+    versionCode 5
+    versionName '1.4'
+    ndk { if (targetAbi) abiFilters targetAbi.toString() }
+    buildConfigField 'String', 'SIGNALING_URL', buildConfigValue('SIGNALING_URL', 'wss://remoteassist.onrender.com/ws')
+    buildConfigField 'String', 'TURN_URL', buildConfigValue('TURN_URL')
+    buildConfigField 'String', 'TURN_USERNAME', buildConfigValue('TURN_USERNAME')
+    buildConfigField 'String', 'TURN_CREDENTIAL', buildConfigValue('TURN_CREDENTIAL')
+  }
+  buildFeatures { buildConfig true }
+  compileOptions { sourceCompatibility JavaVersion.VERSION_17; targetCompatibility JavaVersion.VERSION_17 }
+  kotlinOptions { jvmTarget = '17' }
+}
+dependencies {
+  implementation 'io.github.webrtc-sdk:android:125.6422.06'
+  implementation 'com.squareup.okhttp3:okhttp:4.12.0'
+}
