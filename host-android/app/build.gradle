@@ -11,10 +11,10 @@ android {
     applicationId 'com.tuempresa.remoteassist.host'
     minSdk 26
     targetSdk 34
-    versionCode 5
-    versionName '1.4'
+    versionCode 7
+    versionName '1.6'
     ndk { if (targetAbi) abiFilters targetAbi.toString() }
-    buildConfigField 'String', 'SIGNALING_URL', buildConfigValue('SIGNALING_URL', 'wss://remoteassist.onrender.com/ws')
+    buildConfigField 'String', 'SIGNALING_URL', buildConfigValue('SIGNALING_URL', 'wss://remoteassists.onrender.com/ws')
     buildConfigField 'String', 'TURN_URL', buildConfigValue('TURN_URL')
     buildConfigField 'String', 'TURN_USERNAME', buildConfigValue('TURN_USERNAME')
     buildConfigField 'String', 'TURN_CREDENTIAL', buildConfigValue('TURN_CREDENTIAL')

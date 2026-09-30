@@ -1,6 +1,6 @@
 services:
   - type: web
-    name: remoteassist
+    name: remoteassists
     runtime: node
     rootDir: server
     buildCommand: npm install

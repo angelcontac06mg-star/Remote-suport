@@ -59,7 +59,7 @@ class MainActivity : Activity() {
             orientation = LinearLayout.VERTICAL
             setPadding(dp(12), 0, 0, 0)
             addView(label("RemoteAssist", 19f, ink, true))
-            addView(label("ASISTENCIA REMOTA SEGURA", 10f, muted, true).apply { letterSpacing = .08f })
+            addView(label("ASISTENCIA REMOTA SEGURA · ${BuildConfig.VERSION_NAME}", 10f, muted, true).apply { letterSpacing = .08f })
         }
         brand.addView(brandText)
         page.addView(brand)

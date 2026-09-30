@@ -54,6 +54,8 @@ class ScreenCaptureService : Service() {
     private var reconnectRunnable: Runnable? = null
     private var reconnectAttempts = 0
     private var resumeToken: String? = null
+    @Volatile private var captureReady = false
+    @Volatile private var captureFailed = false
     @Volatile private var stopping = false
     private var factory: PeerConnectionFactory? = null
     private var egl: EglBase? = null
@@ -92,6 +94,8 @@ class ScreenCaptureService : Service() {
         }
         if (sessionActive) return START_NOT_STICKY
         stopping = false
+        captureReady = false
+        captureFailed = false
         sessionActive = true
         publishCode(null)
         publishStatus("Preparando el teléfono…")
@@ -120,12 +124,20 @@ class ScreenCaptureService : Service() {
                 return START_NOT_STICKY
             }
             serverUrl = url
-            setup(data)
+            // Request the room code before initializing WebRTC. Camera/projection setup can
+            // be slow or fail on some phones; it must not prevent signaling from connecting.
             connect(url)
+            try {
+                setup(data)
+                captureReady = true
+            } catch (e: Exception) {
+                captureFailed = true
+                Log.e(logTag, "No se pudo preparar la captura de pantalla", e)
+                publishStatus("No se pudo preparar la pantalla: ${e.message ?: e.javaClass.simpleName}. El código seguirá activo; detén e inicia otra sesión después de revisar el permiso.")
+            }
         } catch (e: Exception) {
             Log.e(logTag, "No se pudo iniciar ScreenCaptureService", e)
             publishStatus("No se pudo iniciar la captura: ${e.message ?: e.javaClass.simpleName}")
-            stopSelf()
         }
         // Android no reinicia una proyección de pantalla sin pedir permiso de nuevo.
         return START_NOT_STICKY
@@ -204,7 +216,13 @@ class ScreenCaptureService : Service() {
                                 publishStatus("La sesión anterior venció. Generando un código nuevo…")
                                 w.send(JSONObject().put("type", "host").toString())
                             }
-                            "joined" -> startOffer()
+                            "joined" -> handler.post {
+                                when {
+                                    captureReady -> startOffer()
+                                    captureFailed -> publishStatus("La PC se conectó, pero Android no pudo preparar la captura de pantalla.")
+                                    else -> publishStatus("La PC se conectó. Preparando la pantalla…")
+                                }
+                            }
                             "answer" -> pc?.setRemoteDescription(object : SO() {
                                 override fun onSetSuccess() {
                                     synchronized(iceLock) {

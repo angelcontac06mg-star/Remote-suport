@@ -1,8 +1,0 @@
-services:
-  - type: web
-    name: remoteassist
-    runtime: node
-    rootDir: server
-    buildCommand: npm install
-    startCommand: npm start
-    plan: free

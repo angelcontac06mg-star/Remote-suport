@@ -1,4 +1,0 @@
-{"name":"remoteassist-viewer","productName":"RemoteAssist Viewer","version":"1.0.0","main":"src/main.js",
-"scripts":{"start":"electron .","dist":"electron-builder --win nsis"},
-"devDependencies":{"electron":"^31.0.0","electron-builder":"^26.0.12"},
-"build":{"appId":"com.tuempresa.remoteassist.viewer","productName":"RemoteAssist Viewer","directories":{"output":"dist"},"files":["src/**/*","package.json"],"win":{"target":["nsis"],"artifactName":"RemoteAssist-Viewer-Setup-${version}.${ext}"},"nsis":{"oneClick":false,"allowToChangeInstallationDirectory":true,"createDesktopShortcut":true,"createStartMenuShortcut":true}}}

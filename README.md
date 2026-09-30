@@ -10,13 +10,13 @@ El video y los controles viajan por una conexión WebRTC entre los dispositivos.
 
 ## Antes de usarlo
 
-Configura la URL pública que Render asignó a tu servidor. El proyecto trae como ejemplo `wss://remoteassist.onrender.com/ws`; reemplázala si tu servicio tiene otro dominio. Los clientes Android y Windows deben conectarse al mismo servidor.
+Configura la URL pública que Render asignó a tu servidor. Este proyecto está preparado para `wss://remoteassists.onrender.com/ws`; reemplázala si tu servicio tiene otro dominio. Android y Windows deben conectarse al mismo servidor.
 
 Para funcionar en distintas redes, configura también un servicio TURN. El código incluye STUN para conexiones sencillas, pero STUN por sí solo no funciona en todas las redes. Usa credenciales TURN temporales si tu proveedor las ofrece: las credenciales que se compilan dentro de una aplicación pueden extraerse del APK.
 
 ## Desplegar el servidor en Render
 
-El archivo `render.yaml` configura un servicio web llamado `remoteassist`. Después del despliegue, usa la URL HTTPS que Render asigne, cambiando `https://` por `wss://` y agregando `/ws`. Por ejemplo: `wss://remoteassist.onrender.com/ws`.
+El archivo `render.yaml` configura un servicio web llamado `remoteassists`. Después del despliegue, usa la URL HTTPS que Render asigne, cambiando `https://` por `wss://` y agregando `/ws`. Por ejemplo: `wss://remoteassists.onrender.com/ws`.
 
 Render debe aceptar las actualizaciones de conexión WebSocket y terminar TLS. El servidor Node escucha el puerto indicado por la variable `PORT` y ofrece una respuesta de estado en `/`.
 
